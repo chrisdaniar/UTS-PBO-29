@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2017 at 01:16 PM
+-- Generation Time: Mar 16, 2017 at 01:24 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `tb_rental` (
 --
 
 INSERT INTO `tb_rental` (`Nama`, `Alamat`, `NoStruk`, `NoPol`, `TanggalPinjam`, `TanggalKembali`, `Harga`) VALUES
-('Niar', 'Sawojajar', 1234, 'N1125N', '2017-03-16', '2017-03-23', 140000);
+('Putri', 'Sawojajar Malang', 1567, 'N1256H', '2017-03-16', '2017-03-30', 280000);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
