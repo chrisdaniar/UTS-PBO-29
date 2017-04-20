@@ -8,8 +8,11 @@ package uts_29;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.Math.toIntExact;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -28,14 +31,17 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmRental extends javax.swing.JFrame {
 
+    String user;
     /**
      * Creates new form FrmRental
      */
-    public FrmRental() {
+    public FrmRental(String u) {
         initComponents();
         selectdata(); 
         SetJam(); 
         SetTanggal();
+        user = u;
+        tfNama.setText(u);
          
          
     }
@@ -86,6 +92,12 @@ public class FrmRental extends javax.swing.JFrame {
         btnPrint = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        tfSearch = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        CariTgl = new com.toedter.calendar.JDateChooser();
+        btnSearchTgl = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -198,7 +210,7 @@ public class FrmRental extends javax.swing.JFrame {
         jPanel1.add(Harga);
         Harga.setBounds(100, 460, 120, 30);
         jPanel1.add(tglKembali);
-        tglKembali.setBounds(20, 370, 200, 30);
+        tglKembali.setBounds(20, 380, 200, 30);
         jPanel1.add(tglPinjam);
         tglPinjam.setBounds(20, 310, 200, 30);
 
@@ -221,10 +233,11 @@ public class FrmRental extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(0, 102, 153));
         jPanel3.setLayout(null);
 
+        jLabel10.setFont(new java.awt.Font("Tekton Pro Ext", 0, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Tanggal :");
+        jLabel10.setText("Cari Nama :");
         jPanel3.add(jLabel10);
-        jLabel10.setBounds(20, 10, 60, 20);
+        jLabel10.setBounds(20, 60, 90, 20);
 
         label_tanggal.setForeground(new java.awt.Color(255, 255, 255));
         jPanel3.add(label_tanggal);
@@ -278,7 +291,7 @@ public class FrmRental extends javax.swing.JFrame {
         }
 
         jPanel3.add(jScrollPane1);
-        jScrollPane1.setBounds(20, 60, 650, 410);
+        jScrollPane1.setBounds(20, 120, 650, 370);
 
         btnClear.setText("CLEAR");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -287,7 +300,7 @@ public class FrmRental extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnClear);
-        btnClear.setBounds(50, 490, 90, 40);
+        btnClear.setBounds(70, 500, 90, 40);
 
         btnDelete.setText("DELETE");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -296,7 +309,7 @@ public class FrmRental extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnDelete);
-        btnDelete.setBounds(160, 490, 90, 40);
+        btnDelete.setBounds(180, 500, 90, 40);
 
         btnPrint.setText("PRINT");
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
@@ -305,7 +318,7 @@ public class FrmRental extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnPrint);
-        btnPrint.setBounds(390, 490, 90, 40);
+        btnPrint.setBounds(410, 500, 90, 40);
 
         btnRefresh.setText("REFRESH");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -314,7 +327,7 @@ public class FrmRental extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnRefresh);
-        btnRefresh.setBounds(270, 490, 100, 40);
+        btnRefresh.setBounds(290, 500, 100, 40);
 
         btnExit.setText("EXIT");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -323,7 +336,46 @@ public class FrmRental extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnExit);
-        btnExit.setBounds(500, 490, 100, 40);
+        btnExit.setBounds(530, 500, 100, 40);
+
+        btnSearch.setText("SEARCH");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnSearch);
+        btnSearch.setBounds(130, 80, 80, 30);
+
+        tfSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfSearchActionPerformed(evt);
+            }
+        });
+        jPanel3.add(tfSearch);
+        tfSearch.setBounds(20, 80, 100, 30);
+
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Tanggal :");
+        jPanel3.add(jLabel11);
+        jLabel11.setBounds(20, 10, 60, 20);
+
+        jLabel12.setFont(new java.awt.Font("Tekton Pro Ext", 0, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Cari Tanggal :");
+        jPanel3.add(jLabel12);
+        jLabel12.setBounds(250, 60, 120, 20);
+        jPanel3.add(CariTgl);
+        CariTgl.setBounds(250, 80, 170, 30);
+
+        btnSearchTgl.setText("SEARCH");
+        btnSearchTgl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchTglActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnSearchTgl);
+        btnSearchTgl.setBounds(430, 80, 80, 30);
 
         getContentPane().add(jPanel3);
         jPanel3.setBounds(250, 60, 700, 550);
@@ -411,7 +463,7 @@ public class FrmRental extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin Menghapus Data!","",JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin akan menghapus data?","",JOptionPane.YES_NO_OPTION);
         int baris = DATA.getSelectedRow();
         if (confirm ==0) {
   
@@ -421,9 +473,9 @@ public class FrmRental extends javax.swing.JFrame {
             int status = KoneksiDB.execute(SQL);
             
             if (status==1) {    
-                JOptionPane.showMessageDialog(this,"Data Berhasil dihapus", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Data Berhasil Dihapus", "Sukses", JOptionPane.INFORMATION_MESSAGE);
             }else {
-                JOptionPane.showMessageDialog(this,"Data Gagal dihapus", "Gagal", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"Data Gagal Dihapus", "Gagal", JOptionPane.WARNING_MESSAGE);
             }
         }else{
             JOptionPane.showMessageDialog(this,"Pilih Baris Data Terlebih Dahulu","Error",JOptionPane.WARNING_MESSAGE);
@@ -438,10 +490,10 @@ public class FrmRental extends javax.swing.JFrame {
     private void btHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btHitungActionPerformed
         Date pinjam = tglPinjam.getDate();
         Date kembali = tglKembali.getDate();
-        long startTime = pinjam.getTime();
-        long endTime = kembali.getTime();
-        long bedaTime = endTime - startTime;
-        long bedaHari = bedaTime / (1000 * 60 * 60 * 24);
+        long waktuMulai = pinjam.getTime();
+        long waktuAkhir = kembali.getTime();
+        long bedaWaktu = waktuAkhir - waktuMulai;
+        long bedaHari = bedaWaktu / (1000 * 60 * 60 * 24);
         DateFormat dateFormat = DateFormat.getDateInstance();
 
         Lama.setText(" "+bedaHari+" hari");
@@ -489,10 +541,77 @@ public class FrmRental extends javax.swing.JFrame {
         }  // TODO add your handling code here:
     }//GEN-LAST:event_DATAMouseClicked
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        try{
+            String konString = "jdbc:mysql://localhost:3306/db_rental"; 
+            Connection conn;
+            conn = (com.mysql.jdbc.Connection) 
+            DriverManager.getConnection(konString,"root",""); ;
+            
+            Statement st = conn.createStatement();
+            String search = tfSearch.getText();
+            ResultSet rs = st.executeQuery("SELECT * FROM tb_rental WHERE Nama like '%"+ search +"%' OR NoStruk like '%"+ search + "%'");
+            DefaultTableModel dtm = (DefaultTableModel) DATA.getModel();
+
+            dtm.setRowCount(0);
+            String [] data = new String[9];
+            int i = 1;
+
+            while(rs.next())
+            {
+                data[0] = rs.getString("Nama");
+                data[1] = rs.getString("Alamat");
+                data[2] = rs.getString("NoStruk");
+                data[3] = rs.getString("NoPol");
+                data[4] = rs.getString("TanggalPinjam");
+                data[5] = rs.getString("TanggalKembali");
+                data[6] = rs.getString("Harga");
+                dtm.addRow(data);
+                i++;
+            }
+            rs.close();
+            tfSearch.setText("");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Data yang Anda cari Tidak dapat Ditemukan");
+            System.err.println("error (search) : " +ex);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void tfSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSearchActionPerformed
+      
+    }//GEN-LAST:event_tfSearchActionPerformed
+
+    private void btnSearchTglActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchTglActionPerformed
+         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+       String date = dateFormat.format(CariTgl.getDate());
+       String kolom[]={"Nama","Alamat","NoStruk","NoPol","TanggalPinjam","TanggalKembali","Harga"};
+       DefaultTableModel dtm = new DefaultTableModel(null, kolom);  
+       String SQL = "SELECT * FROM tb_rental WHERE TanggalPinjam <= '"+date+"' AND TanggalKembali >= '"+date+"'";
+       System.out.println(SQL);
+       ResultSet rs = KoneksiDB.executeQuery(SQL);
+        try{
+            while(rs.next()){
+                String Nama = rs.getString(1);
+                String Alamat = rs.getString(2);
+                String NoStruk  = rs.getString(3);
+                String NoPol = rs.getString(4);
+                String TanggalPinjam = rs.getString(5);
+                String TanggalKembali = rs.getString(6);
+                String Harga = rs.getString(7);
+                
+                    String data[] = {Nama, Alamat, NoStruk, NoPol, TanggalPinjam, TanggalKembali, Harga};
+                    dtm.addRow(data);
+            }
+        }   catch(SQLException ex){
+                    Logger.getLogger(FrmRental.class.getName()).log(Level.SEVERE,null, ex);
+                    }
+            DATA.setModel(dtm);  
+    }//GEN-LAST:event_btnSearchTglActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -519,12 +638,13 @@ public class FrmRental extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmRental().setVisible(true);
+                new FrmRental(user).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser CariTgl;
     private javax.swing.JTable DATA;
     private javax.swing.JTextField Harga;
     private javax.swing.JTextField Lama;
@@ -535,8 +655,12 @@ public class FrmRental extends javax.swing.JFrame {
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSearchTgl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -559,6 +683,7 @@ public class FrmRental extends javax.swing.JFrame {
     private javax.swing.JTextArea taAlamat;
     private javax.swing.JTextField tfNama;
     private javax.swing.JTextField tfNopol;
+    private javax.swing.JTextField tfSearch;
     private javax.swing.JTextField tfStruk;
     private com.toedter.calendar.JDateChooser tglKembali;
     private com.toedter.calendar.JDateChooser tglPinjam;

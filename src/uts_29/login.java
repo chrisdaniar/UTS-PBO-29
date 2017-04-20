@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,6 +43,7 @@ public class login extends javax.swing.JFrame {
         btnSignIn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -54,6 +56,12 @@ public class login extends javax.swing.JFrame {
         jLabel3.setText("Password");
         jPanel1.add(jLabel3);
         jLabel3.setBounds(60, 120, 80, 30);
+
+        username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameActionPerformed(evt);
+            }
+        });
         jPanel1.add(username);
         username.setBounds(40, 80, 370, 40);
 
@@ -70,7 +78,7 @@ public class login extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnCancel);
-        btnCancel.setBounds(110, 200, 100, 30);
+        btnCancel.setBounds(160, 200, 100, 30);
 
         btnSignIn.setText("SignIn");
         btnSignIn.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +87,7 @@ public class login extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSignIn);
-        btnSignIn.setBounds(220, 200, 100, 30);
+        btnSignIn.setBounds(280, 200, 90, 30);
 
         jLabel2.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -88,6 +96,15 @@ public class login extends javax.swing.JFrame {
         jLabel2.setBounds(200, 0, 130, 40);
         jPanel1.add(password);
         password.setBounds(40, 150, 370, 40);
+
+        jButton1.setText("SignUp");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+        jButton1.setBounds(60, 200, 80, 30);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 450, 270);
@@ -110,7 +127,8 @@ public class login extends javax.swing.JFrame {
             ps.setString(2, password.getText());
             ResultSet result = ps.executeQuery();
             if(result.next()){
-                new FrmRental().show();
+                String user = username.getText();
+                new FrmRental(user).setVisible(true);
                 this.dispose();
             }
             else {
@@ -123,6 +141,28 @@ public class login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Gagal");
         }
     }//GEN-LAST:event_btnSignInActionPerformed
+
+    private void usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String user = username.getText();
+        String pass = password.getText();
+        
+        if(user.isEmpty() || pass.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Mohon maaf, harap isi dengan benar");
+        } else {
+            try{
+                try (Statement statement = (Statement) file_koneksi.GetConnection().createStatement()) {
+                    statement.executeUpdate("INSERT INTO `tb_admin`(`username`,`password`) VALUES ('"+user+"','"+pass+"')");
+                }
+                JOptionPane.showMessageDialog(null,"Selamat! Anda Berhasil Sign Up!");
+            } catch (Exception t){
+                JOptionPane.showMessageDialog(null, "Mohon maaf, ulangi lagi prosedur");
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,6 +202,7 @@ public class login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSignIn;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
