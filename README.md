@@ -23,7 +23,11 @@ Aplikasi berikut digunakan untuk sebuah tempat rental motor menginputkan data pe
 7. Tampilan saat button Refresh di klik <br>
 ![refresh](https://cloud.githubusercontent.com/assets/22118129/23996157/f5b7d858-0a7e-11e7-9be7-261c80d5a67b.PNG)<br>
 8. Tampilan saat button Print di klik <br>
-![print](https://cloud.githubusercontent.com/assets/22118129/23996156/f59f3ae6-0a7e-11e7-9379-737f76ade12a.PNG)
+![print](https://cloud.githubusercontent.com/assets/22118129/23996156/f59f3ae6-0a7e-11e7-9379-737f76ade12a.PNG) <br>
+9. Fitur Search<br>
+![nama](https://cloud.githubusercontent.com/assets/22118129/25264910/3ab12294-2694-11e7-9268-a121ec9d3423.PNG) <br>
+![searchnama](https://cloud.githubusercontent.com/assets/22118129/25264911/3ab334e4-2694-11e7-965c-1a9fc6b1ab8d.PNG)<br>
+![searchtgl](https://cloud.githubusercontent.com/assets/22118129/25264912/3ab3a56e-2694-11e7-849f-f9684f3a73bc.PNG)<br>
 
 
 
